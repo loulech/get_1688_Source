@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+	<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+
+<img id = "aim" src="/fakeImg/img.jollychic.com/uploads/jollyimg/gallery/201612/01/201612011149wnx.jpg" onload="switchToNext()"/>
+<img id = "after" src="">
+<script type="text/javascript">
+	function getBase64Image(img) {
+	  var canvas = document.createElement("canvas");
+	  canvas.width = img.width;
+	  canvas.height = img.height;
+	  var ctx = canvas.getContext("2d");
+	  ctx.drawImage(img, 0, 0);
+	  var dataURL = canvas.toDataURL("image/jpeg");
+	  return dataURL
+	}
+	function randomString(len) {
+		len = len?len:32;
+		var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+		var maxPos = $chars.length;
+		var pwd = '';
+		for (i = 0; i < len; i++) {
+			pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+		}
+		return pwd;
+	}
+	var list = [
+		"/fakeImg/img.jollychic.com/uploads/jollyimg/imageLibrary/201612/29/IL201612291503037554.jpg",
+		"/fakeImg/img.jollychic.com/uploads/jollyimg/gallery/201611/01/201611011553tzo.jpg",
+		"/fakeImg/img.jollychic.com/uploads/jollyimg/gallery/201607/15/201607151128mfo.jpg",
+		"/fakeImg/img.jollychic.com/uploads/jollyimg/imageLibrary/201611/07/IL201611071036280511.jpg"
+	]
+	var count = 0
+	function switchToNext(){
+		var base64 = getBase64Image(document.getElementById("aim"));
+		document.getElementById("after").src = base64
+		$.post("/ajax/fileReader",JSON.stringify({fileName:randomString(16)+".jpg",data:base64}),function(data){
+			console.log(JSON.stringify(data))
+		},"json")
+		if(count==list.length){
+			return;
+		}
+		document.getElementById("aim").src = list[count];
+		count++
+	}
+
+	
+
+
+</script>
+</body>
+</html>
